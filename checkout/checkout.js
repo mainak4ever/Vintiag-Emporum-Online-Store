@@ -61,71 +61,75 @@ $('#btn-place-order').click(function () {
     if (isLoggedIn == null || isLoggedIn == false) {
         alert("Log In to place order")
     } else {
-        var orderItems = []
-        console.log(cartList)
-        for (var i = 0; i < cartList.length; ++i) {
-            // console.log(cartList[i])
-            var obj = {
-                "id": cartList[i].id,
-                "brand": cartList[i].brand,
-                "name": cartList[i].name,
-                "price": cartList[i].price,
-                "preview": cartList[i].preview,
-                "isAccessory": cartList[i].isAccessory,
-                "quantity": cartList[i].quantity
-            }
-            orderItems.push(obj);
-        }
-        var orderList = JSON.parse(localStorage.getItem('orders')) || [];
-        var orderId
-
-        if (orderList.length == 0) {
-            orderId = 100001;
+        if (cartList.length == 0) {
+            alert("Cart Empty");
         } else {
-            orderId = parseInt(orderList[orderList.length - 1].id) + 1
-        }
-
-        var orderObj = {
-            id: orderId,
-            amount: totalAmount,
-            items: totalItems,
-            products: orderItems
-
-        }
-        orderList.push(orderObj)
-        localStorage.setItem('orders', JSON.stringify(orderList))
-
-        // $.post('https://5d76bf96515d1a0014085cf9.mockapi.io/order', orderObj, function () {
-        //     localStorage.setItem('cart', []);
-        //     alert('Order Placed Successfully')
-
-        //     location.assign('./thankyou.html');
-        // })
-
-        try {
-            $.ajax({
-                type: 'POST',
-                url: 'https://5d76bf96515d1a0014085cf9.mockapi.io/order',
-                data: JSON.stringify(orderObj),
-                contentType: 'application/json',
-                success: function (response) {
-                    // Handle the success response here
-                    console.log('Success:', response);
-                },
-                error: function (xhr, status, error) {
-                    // Handle the error here
-                    console.log('Error:', xhr.responseText);
-                    throw new Error('POST request failed'); // Throw an error to trigger the catch block
+            var orderItems = []
+            console.log(cartList)
+            for (var i = 0; i < cartList.length; ++i) {
+                // console.log(cartList[i])
+                var obj = {
+                    "id": cartList[i].id,
+                    "brand": cartList[i].brand,
+                    "name": cartList[i].name,
+                    "price": cartList[i].price,
+                    "preview": cartList[i].preview,
+                    "isAccessory": cartList[i].isAccessory,
+                    "quantity": cartList[i].quantity
                 }
-            });
-        } catch (e) {
-            // Handle exceptions here
-            console.error('Exception:', e);
-        } finally {
-            localStorage.removeItem('cart');
-            // alert('Order Placed Successfully')
+                orderItems.push(obj);
+            }
+            var orderList = JSON.parse(localStorage.getItem('orders')) || [];
+            var orderId
 
-            location.assign('../orderConfirm/orderConfirm.html?p=' + orderId);
+            if (orderList.length == 0) {
+                orderId = 100001;
+            } else {
+                orderId = parseInt(orderList[orderList.length - 1].id) + 1
+            }
+
+            var orderObj = {
+                id: orderId,
+                amount: totalAmount,
+                items: totalItems,
+                products: orderItems
+
+            }
+            orderList.push(orderObj)
+            localStorage.setItem('orders', JSON.stringify(orderList))
+
+            // $.post('https://5d76bf96515d1a0014085cf9.mockapi.io/order', orderObj, function () {
+            //     localStorage.setItem('cart', []);
+            //     alert('Order Placed Successfully')
+
+            //     location.assign('./thankyou.html');
+            // })
+
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://5d76bf96515d1a0014085cf9.mockapi.io/order',
+                    data: JSON.stringify(orderObj),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // Handle the success response here
+                        console.log('Success:', response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error here
+                        console.log('Error:', xhr.responseText);
+                        throw new Error('POST request failed'); // Throw an error to trigger the catch block
+                    }
+                });
+            } catch (e) {
+                // Handle exceptions here
+                console.error('Exception:', e);
+            } finally {
+                localStorage.removeItem('cart');
+                alert('Order Placed Successfully')
+
+                location.assign('../orderConfirm/orderConfirm.html?p=' + orderId);
+            }
         }
     }
 })
