@@ -117,6 +117,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    $('#profile-link').on('click', function () {
+        if (isLoggedIn == null || isLoggedIn == false) {
+            alert("Log In to access Profile");
+            // return false;
+        }
+    });
+
     // function decryptData(cipherText) {
     //     // Decrypt the ciphertext using the same secret key
     //     const secretKey = 'Mainak Mitra'
