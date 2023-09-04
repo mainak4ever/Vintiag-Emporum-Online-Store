@@ -123,7 +123,7 @@ $('#btn-place-order').click(function () {
             console.error('Exception:', e);
         } finally {
             localStorage.removeItem('cart');
-            alert('Order Placed Successfully')
+            // alert('Order Placed Successfully')
 
             location.assign('../orderConfirm/orderConfirm.html?p=' + orderId);
         }
